@@ -1,0 +1,13 @@
+[project]
+name = "pz-modding-config"
+description = "Provides default configurations for Visual Studio Code and EmmyLua, created by retrieving default settings from different datasets and schema providers to easily get started with modding."
+requires-python = ">=3.12.3"
+version = "1.0.0"
+license-files = ["LICENSE"]
+authors = [
+  { name = "SimKDT" },
+]
+dependencies = []
+
+[project.scripts]
+mergeconfigs = "pz_modding_config.merge:main"

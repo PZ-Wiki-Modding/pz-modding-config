@@ -1,0 +1,6 @@
+[submodule "external/pz-xml-data"]
+	path = external/pz-xml-data
+	url = https://github.com/PZ-Wiki-Modding/pz-xml-data
+[submodule "external/pz-translation-data"]
+	path = external/pz-translation-data
+	url = https://github.com/PZ-Wiki-Modding/pz-translation-data
