@@ -4,11 +4,13 @@ on:
   push:
     branches: [main, dev]
     paths:
+      - '.github/workflows/update.yaml'
       - 'src/pz_modding_config/**'
       - 'out/**'
   pull_request:
     branches: [main, dev]
     paths:
+      - '.github/workflows/update.yaml'
       - 'src/pz_modding_config/**'
       - 'out/**'
   workflow_dispatch:

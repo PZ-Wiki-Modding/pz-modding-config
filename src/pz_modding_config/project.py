@@ -1,6 +1,7 @@
 from pathlib import Path
 
-PROJECT_DIR = Path(__file__).parent.parent.parent
+# Get project root from environment variable, or use current working directory
+PROJECT_DIR = Path.cwd()
 EXTERNAL_DIR = PROJECT_DIR / "external"
 OUT_DIR = PROJECT_DIR / "out"
 
