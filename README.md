@@ -7,9 +7,6 @@ Currently the configurations are generated from the following sources:
 - [pz-xml-data](https://github.com/PZ-Wiki-Modding/pz-xml-data)
 - Console files definitions using the Log File Highlighter extension to provide syntax highlighting for console logs. (stored in the [log-file-highlighter](log-file-highlighter/) directory)
 
-> [!NOTE]
-> The console files definition was originally created by Aiteron from The Indie Stone but is not directly distributed by the company and is now community maintained.
-
 ## Usage
 ### Requirements
 You need to install the following extensions in Visual Studio Code to use the configurations:
