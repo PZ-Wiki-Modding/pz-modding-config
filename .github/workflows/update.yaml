@@ -1,0 +1,62 @@
+name: Update configuration
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'src/pz_modding_config/**'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'src/pz_modding_config/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.0
+          
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          
+      - name: Install dependencies
+        run: |
+          pip install .
+
+      - name: Run vscode config merge
+        run: mergeconfigs
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add out/*
+          git diff --quiet && git diff --staged --quiet || (git commit -m "CHORE: update configuration" && git push)
+
+      # - name: Upload configurations
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: configurations
+      #     path: out/*
+      #     if-no-files-found: error
+
+  release:
+    needs: update
+    runs-on: ubuntu-latest
+    steps:
+      # - uses: actions/download-artifact@v4
+      #   with:
+      #     name: configurations
+
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: out/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
