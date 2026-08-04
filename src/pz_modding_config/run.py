@@ -1,12 +1,13 @@
 import json, shutil
 
-from pz_modding_config.project import OUT_DIR, EXTERNAL_DIR, EMMYLUA_DIR
+from pz_modding_config.project import OUT_DIR, EXTERNAL_DIR, EMMYLUA_DIR, PROJECT_DIR
 from pz_modding_config.utils import merge_settings
 
 # configuration files
 CONFIGURATION_FILES = [
     EXTERNAL_DIR / "pz-translation-data" / "out" / "settings.json",
     EXTERNAL_DIR / "pz-xml-data" / "out" / "settings.json",
+    PROJECT_DIR / "log-file-highlighter" / "settings.json",
 ]
 OUT_PATH = OUT_DIR / ".vscode" / "settings.json"
 
