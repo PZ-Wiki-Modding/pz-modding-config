@@ -1,18 +1,6 @@
 name: Update configuration
 
 on:
-  push:
-    branches: [main, dev]
-    paths:
-      - '.github/workflows/update.yaml'
-      - 'src/pz_modding_config/**'
-      - 'out/**'
-  pull_request:
-    branches: [main, dev]
-    paths:
-      - '.github/workflows/update.yaml'
-      - 'src/pz_modding_config/**'
-      - 'out/**'
   workflow_dispatch:
 
 permissions:
@@ -21,8 +9,6 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-    outputs:
-      changes_made: ${{ steps.commit.outputs.changes_made }}
     steps:
       - uses: actions/checkout@v6.0.0
 
@@ -56,17 +42,23 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add out/*
-          if git diff --quiet && git diff --staged --quiet; then
-            echo "changes_made=false" >> $GITHUB_OUTPUT
-          else
-            git commit -m "CHORE: update configuration"
-            git push
-            echo "changes_made=true" >> $GITHUB_OUTPUT
-          fi
+          git commit -m "CHORE: update configuration"
+          git push
+
+      - name: Create archive
+        run: |
+          cd out
+          zip -r ../configurations.zip .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: configurations
+          path: configurations.zip
+          if-no-files-found: error
 
   release:
     needs: update
-    if: needs.update.outputs.changes_made == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.0
@@ -82,6 +74,6 @@ jobs:
         with:
           tag_name: ${{ steps.date.outputs.tag }}
           name: Release ${{ steps.date.outputs.tag }}
-          files: out/*
+          files: configurations.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
