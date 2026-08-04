@@ -64,7 +64,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: configurations
-          path: configurations.zip
+          path: ./release-files
 
       - name: Generate release tag
         id: date
@@ -75,6 +75,6 @@ jobs:
         with:
           tag_name: ${{ steps.date.outputs.tag }}
           name: Release ${{ steps.date.outputs.tag }}
-          files: configurations.zip
+          files: ./release-files/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
