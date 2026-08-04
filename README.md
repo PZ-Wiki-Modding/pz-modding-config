@@ -33,6 +33,7 @@ Alternatively, you can find these latest files in the `out` directory of this re
 ## Build
 Create a virtual environment and install dependencies:
 ```
+git submodule update --init --recursive
 python3 -m venv .venv
 source .venv/bin/activate
 pip install .
