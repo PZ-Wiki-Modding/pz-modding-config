@@ -5,10 +5,12 @@ on:
     branches: [main, dev]
     paths:
       - 'src/pz_modding_config/**'
+      - 'out/**'
   pull_request:
     branches: [main, dev]
     paths:
       - 'src/pz_modding_config/**'
+      - 'out/**'
   workflow_dispatch:
 
 permissions:
@@ -17,6 +19,8 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    outputs:
+      changes_made: ${{ steps.commit.outputs.changes_made }}
     steps:
       - uses: actions/checkout@v6.0.0
           
@@ -30,33 +34,43 @@ jobs:
           pip install .
 
       - name: Run vscode config merge
-        run: mergeconfigs
+        run: |
+          set -e
+          mergeconfigs || exit 1
+        continue-on-error: false
 
       - name: Commit changes
+        id: commit
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add out/*
-          git diff --quiet && git diff --staged --quiet || (git commit -m "CHORE: update configuration" && git push)
-
-      # - name: Upload configurations
-      #   uses: actions/upload-artifact@v7
-      #   with:
-      #     name: configurations
-      #     path: out/*
-      #     if-no-files-found: error
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "CHORE: update configuration"
+            git push
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+          fi
 
   release:
     needs: update
+    if: needs.update.outputs.changes_made == 'true'
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/download-artifact@v4
-      #   with:
-      #     name: configurations
+      - uses: actions/checkout@v6.0.0
+        with:
+          ref: main
+
+      - name: Generate release tag
+        id: date
+        run: echo "tag=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Create release
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ steps.date.outputs.tag }}
+          name: Release ${{ steps.date.outputs.tag }}
           files: out/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
