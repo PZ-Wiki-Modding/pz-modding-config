@@ -9,7 +9,7 @@ Currently the configurations are generated from the following sources:
 
 ## Usage
 ### Requirements
-You need to install the following extensions in Visual Studio Code to use the configurations:
+You need to install the following extensions in Visual Studio Code to get access to the full configurations capabilities:
 - [EmmyLua](https://marketplace.visualstudio.com/items?itemName=tangzx.emmylua)
 - [XML by RedHat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml)
 - [Log File Highlighter](https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter)
