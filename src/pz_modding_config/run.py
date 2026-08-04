@@ -1,6 +1,6 @@
-import json
+import json, shutil
 
-from pz_modding_config.project import OUT_DIR, EXTERNAL_DIR
+from pz_modding_config.project import OUT_DIR, EXTERNAL_DIR, EMMYLUA_DIR
 from pz_modding_config.utils import merge_settings
 
 # configuration files
@@ -10,10 +10,14 @@ CONFIGURATION_FILES = [
 ]
 OUT_PATH = OUT_DIR / ".vscode" / "settings.json"
 
+# emmylua stuff
+EMMYLUA_IN = EMMYLUA_DIR / ".emmyrc.json"
+EMMYLUA_OUT = OUT_DIR / ".emmyrc.json"
+
 def main():
     out_config = {}
 
-    # merge
+    # merge VSCode configuration files from datasets into singular file
     for config_file in CONFIGURATION_FILES:
         assert config_file.exists(), f"Config doesn't exist: {config_file}"
         print(config_file)
@@ -21,12 +25,18 @@ def main():
             config = json.load(f)
             out_config = merge_settings(out_config, config)
 
-    # output
+    # output settings.json
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_PATH, 'w') as f:
         json.dump(out_config, f, indent=4)
 
     print(f"Configuration merged and saved to {OUT_PATH}")
+
+    # copy emmylua configuration file into out
+    EMMYLUA_OUT.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(EMMYLUA_IN, EMMYLUA_OUT)
+
+    print(f"EmmyLua configuration copied to {EMMYLUA_OUT}")
 
 if __name__ == "__main__":
     main()

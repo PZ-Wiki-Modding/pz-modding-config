@@ -38,10 +38,16 @@ jobs:
         run: |
           pip install .
 
-      - name: Run vscode config merge
+      - name: Clear out directory
         run: |
           set -e
-          mergeconfigs || exit 1
+          clearoutdir || exit 1
+        continue-on-error: false
+
+      - name: Run config setup
+        run: |
+          set -e
+          setupconfigs || exit 1
         continue-on-error: false
 
       - name: Commit changes

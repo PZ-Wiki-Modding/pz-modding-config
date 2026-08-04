@@ -10,4 +10,5 @@ authors = [
 dependencies = []
 
 [project.scripts]
-mergeconfigs = "pz_modding_config.merge:main"
+setupconfigs = "pz_modding_config.run:main"
+clearoutdir = "pz_modding_config.clear:main"
