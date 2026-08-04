@@ -42,8 +42,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add out/*
-          git commit -m "CHORE: update configuration"
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "CHORE: update configuration" && git push)
 
       - name: Create archive
         run: |
