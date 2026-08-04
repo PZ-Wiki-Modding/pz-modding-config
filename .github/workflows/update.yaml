@@ -25,6 +25,9 @@ jobs:
       changes_made: ${{ steps.commit.outputs.changes_made }}
     steps:
       - uses: actions/checkout@v6.0.0
+
+      - name: Init submodules
+        run: git submodule update --init --recursive --remote
           
       - name: Set up Python
         uses: actions/setup-python@v7
